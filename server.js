@@ -50,8 +50,9 @@ app.use((_req, res) =>
 
 app.use((err, _req, res, _next) => {
   console.error(err);
-  res.status(500).json({ success: false, message: 'Server error.' });
-});
+  res.status(500).json({ success: false, message: 
+  const PORT = process.env.PORT || 5000;
 
-// ✅ IMPORTANT
-module.exports = app;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
