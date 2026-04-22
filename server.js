@@ -37,6 +37,10 @@ app.use((req, _res, next) => {
 
 app.use('/api', require('./routes/api'));
 
+app.get('/', (req, res) => {
+  res.send("API root working");
+});
+
 app.get('/health', (_req, res) =>
   res.json({ status: 'OK', service: 'API' })
 );
