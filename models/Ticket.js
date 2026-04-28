@@ -7,12 +7,12 @@ const ticketSchema = new mongoose.Schema({
   phone:    { type: String, required: true, trim: true },
   serviceType: {
     type: String,
-    enum: ['AC', 'Heating', 'Installation', 'Maintenance', 'Air Quality', 'Emergency', 'Other'],
     default: 'Other',
+    // No enum restriction — accepts any service name from the form
   },
   city:    { type: String, trim: true },
   message: { type: String, required: true, trim: true },
-  status:  {
+  status: {
     type: String,
     enum: ['Pending', 'In Progress', 'Completed', 'Cancelled'],
     default: 'Pending',
@@ -24,7 +24,7 @@ const ticketSchema = new mongoose.Schema({
   },
   adminNotes: { type: String },
   resolvedAt: { type: Date },
-  source:  { type: String, default: 'website' },
+  source: { type: String, default: 'website' },
 }, { timestamps: true });
 
 ticketSchema.pre('save', function (next) {
