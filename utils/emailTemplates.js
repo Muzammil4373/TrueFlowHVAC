@@ -2,8 +2,8 @@ const biz = () => ({
   name:    process.env.BUSINESS_NAME  || 'TruFlow Heating & Cooling',
   phone:   process.env.BUSINESS_PHONE || '(630)999-0127',
   wa:      process.env.WHATSAPP_NUMBER|| '(888)581-5178',
-  url:     process.env.FRONTEND_URL   || 'https://true-flow-hvac-frontend.vercel.app/',
-  email:   process.env.BUSINESS_EMAIL || 'muzammilshaikh4373@gmail.com',
+  url:     process.env.FRONTEND_URL   || 'truflowhvac.com',
+  email:   process.env.BUSINESS_EMAIL || 'truflowhvac@gmail.com',
 });
 
 const userEmailHTML = ({ name, ticketId, serviceType, message }) => {
