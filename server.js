@@ -7,6 +7,10 @@ const { verifyEmailConfig } = require('./utils/emailService');
 
 const app = express();
 
+// ── Trust proxy — REQUIRED on Render/Vercel/any reverse proxy ──
+// Without this, express-rate-limit throws ERR_ERL_UNEXPECTED_X_FORWARDED_FOR
+app.set('trust proxy', 1);
+
 // Connect DB then seed admin
 connectDB().then(seedAdmin);
 
@@ -19,20 +23,20 @@ const cleanOrigin = rawOrigin.replace(/\/$/, '');
 
 const allowedOrigins = [
   cleanOrigin,
+  'https://truflowhvac.com',
+  'https://www.truflowhvac.com',
   'http://localhost:3000',
   'http://localhost:3001',
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (mobile apps, curl, Postman)
     if (!origin) return callback(null, true);
-
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       console.warn(`⚠️  CORS blocked: ${origin}`);
-      callback(null, true); // Allow all for now — tighten after testing
+      callback(null, true); // allow all for now
     }
   },
   credentials: true,
@@ -40,13 +44,11 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-// Handle preflight requests
 app.options('*', cors());
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Request logger
 app.use((req, _res, next) => {
   console.log(`${new Date().toISOString()} ${req.method} ${req.path}`);
   next();
@@ -63,9 +65,10 @@ app.use((err, _req, res, _next) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`\n🚀 TruFlow API running on port ${PORT}`);
-  console.log(`   CORS ORIGIN : ${cleanOrigin}`);
-  console.log(`   EMAIL_USER  : ${process.env.EMAIL_USER   || '❌ NOT SET'}`);
-  console.log(`   EMAIL_PASS  : ${process.env.EMAIL_PASS   ? '✅ SET' : '❌ NOT SET'}`);
+  console.log(`   TRUST PROXY  : enabled`);
+  console.log(`   CORS ORIGIN  : ${cleanOrigin}`);
+  console.log(`   EMAIL_USER   : ${process.env.EMAIL_USER   || '❌ NOT SET'}`);
+  console.log(`   EMAIL_PASS   : ${process.env.EMAIL_PASS   ? '✅ SET'     : '❌ NOT SET'}`);
+  console.log(`   EMAIL_PORT   : ${process.env.EMAIL_PORT   || '465'}`);
   console.log(`   BUSINESS_EMAIL: ${process.env.BUSINESS_EMAIL || '❌ NOT SET'}`);
-  console.log(`   ADMIN_EMAIL : ${process.env.ADMIN_EMAIL  || '❌ NOT SET'}`);
 });
