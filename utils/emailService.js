@@ -16,8 +16,8 @@ const checkConfig = () => {
 const createTransporter = () => {
   return nodemailer.createTransport({
     host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-    port: 465,
-    secure: true, // TLS on port 587
+    port:587,
+    secure:false, // TLS on port 587
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
